@@ -1,0 +1,8 @@
+MERGE (tom:Person {name: "Tom Cruise", birthDate: "1962-07-03", gender: "male"})
+MERGE (topGun:Movie {title: "Top Gun", releaseYear: 1986})
+MERGE (missionImpossible:Movie {title: "Mission: Impossible", releaseYear: 1996})
+MERGE (tom)-[:ACTED_IN {role: "Lt. Pete 'Maverick' Mitchell"}]->(topGun)
+MERGE (tom)-[:ACTED_IN {role: "Ethan Hunt"}]->(missionImpossible)
+MERGE (mary:Person {name: "Mary Lee Pfeiffer"})
+MERGE (mary)-[:PARENT_OF]->(tom)
+MERGE (mary)-[:HAS_CHILD]->(tom)
