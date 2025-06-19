@@ -4,6 +4,7 @@ import GraphDB from "./graphDB"
 
 // Assuming OPENAI_API_KEY is set in your .env file
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY as string })
+const assistantOptions = { headers: { 'OpenAI-Beta': 'assistants=v2' } }
 
 const userPrompt = "Who is the son of Mary Lee Pfeiffer?"
 
@@ -76,26 +77,26 @@ async function main() {
           },
         },
       ],
-    })
+    }, assistantOptions)
 
     // Create a new thread
-    const threadId = (await client.beta.threads.create()).id
+    const threadId = (await client.beta.threads.create(assistantOptions)).id
 
     // Send the user's query
     await client.beta.threads.messages.create(threadId, {
       role: "user",
       content: userPrompt,
-    })
+    }, assistantOptions)
 
     // Execute the assistant
     let run = await client.beta.threads.runs.create(threadId, {
       assistant_id: assistant.id,
-    })
+    }, assistantOptions)
 
     // Check for the status of the run
     while (run.status === "queued" || run.status === "in_progress") {
       await sleep(1000)
-      run = await client.beta.threads.runs.retrieve(threadId, run.id)
+      run = await client.beta.threads.runs.retrieve(threadId, run.id, assistantOptions)
     }
 
     // If the assistant requires an action (like executing a tool function)
@@ -123,18 +124,18 @@ async function main() {
               },
             ],
           }
-        )
+        , assistantOptions)
 
         // Wait for the run to complete
         while (run.status === "queued" || run.status === "in_progress") {
           await sleep(1000)
-          run = await client.beta.threads.runs.retrieve(threadId, run.id)
+          run = await client.beta.threads.runs.retrieve(threadId, run.id, assistantOptions)
         }
       }
     }
 
     // Retrieve and print all messages in the thread
-    const messages = await client.beta.threads.messages.list(threadId)
+    const messages = await client.beta.threads.messages.list(threadId, assistantOptions)
 
     messages.data
       .sort((a, b) => (a.created_at < b.created_at ? -1 : 1))

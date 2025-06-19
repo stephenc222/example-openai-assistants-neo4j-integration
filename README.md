@@ -1,5 +1,7 @@
 # Example OpenAI Assistants Neo4j integration
 
+🚧 **The OpenAI Assistants API is going to be [sunset in 2026](https://platform.openai.com/docs/assistants/overview). The suggested alternative is to use the OpenAI [Responses API](https://platform.openai.com/docs/api-reference/responses) instead.** 🚧
+
 ## Overview
 
 This repo is the companion code repository for [my blog post](https://stephencollins.tech/posts/how-to-integrate-neo4j-openai-gpt-assistants) on leveraging Neo4j as a tool for an OpenAI Assistant to use.
